@@ -12,7 +12,7 @@ I'm Omololu Tofunmi ("Panda"), a Full Stack Developer and Computer Science stude
 
 **Frontend:** React, Vite, Angular, Tailwind CSS, JavaScript, RxJS
 
-**Backend:** Node.js, Express.js, NestJS, FastAPI, GraphQL
+**Backend:** Node.js, Express.js, NestJS, GraphQL
 
 **Database:** PostgreSQL, SQLite
 
