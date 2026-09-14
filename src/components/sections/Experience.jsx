@@ -2,26 +2,37 @@ import React from 'react';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 
 const ExperienceItem = ({ role, company, period, location, description, bullets, status, githubUrl, liveUrl, tools }) => (
-    <div className="group border-l-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-100 pl-6 py-2 transition-colors duration-300">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-white flex items-center gap-2 flex-wrap">
-                <span>{role}</span>
+    <div className="group border-l-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-100 pl-5 sm:pl-6 py-2 transition-colors duration-300">
+        
+        {/* Responsive Header Row */}
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-4 mb-2">
+            <h3 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-white leading-snug">
+                {role}
+            </h3>
+
+            {/* Status & Period Badge Wrapper */}
+            <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
                 {status && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-500/20">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-500/20">
                         {status}
                     </span>
                 )}
-            </h3>
-            <span className="text-sm font-mono text-zinc-500 dark:text-zinc-500">{period}</span>
+                {period && (
+                    <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-medium">
+                        {period}
+                    </span>
+                )}
+            </div>
         </div>
 
+        {/* Company & Action Links */}
         <div className="text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-3 flex items-center justify-between flex-wrap gap-2">
             <span>
                 {company} {location && <span className="text-zinc-400 font-normal">({location})</span>}
             </span>
             
             {/* Action Links */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
                 {githubUrl && (
                     <a
                         href={githubUrl}
@@ -30,9 +41,9 @@ const ExperienceItem = ({ role, company, period, location, description, bullets,
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60 transition-all shadow-2xs"
                         title="View GitHub Repository"
                     >
-                        <Github size={14} />
+                        <Github size={13} />
                         <span>Repository</span>
-                        <ArrowUpRight size={12} className="text-zinc-400" />
+                        <ArrowUpRight size={11} className="text-zinc-400" />
                     </a>
                 )}
                 {liveUrl && (
@@ -43,7 +54,7 @@ const ExperienceItem = ({ role, company, period, location, description, bullets,
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 border border-emerald-200 dark:border-emerald-500/30 transition-all"
                         title="View Live Product"
                     >
-                        <ExternalLink size={14} />
+                        <ExternalLink size={13} />
                         <span>Live Demo</span>
                     </a>
                 )}
