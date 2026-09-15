@@ -6,13 +6,19 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     font-family: 'Outfit', sans-serif;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-zinc-950 text-zinc-100 antialiased selection:bg-white/20;
     font-family: 'Outfit', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button, a, [role="button"], input, textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

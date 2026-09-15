@@ -40,7 +40,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                         smooth={true}
                         offset={-100}
                         duration={500}
-                        className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors text-xs font-semibold"
+                        role="button"
+                        className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors text-xs font-semibold select-none"
                         activeClass="text-zinc-900 dark:text-white font-bold"
                     >
                         {item.name}
@@ -51,7 +52,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                     href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all text-xs font-semibold flex items-center gap-1"
+                    className="px-2.5 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all text-xs font-semibold flex items-center gap-1 select-none"
                     title="Open Official Resume PDF"
                 >
                     <span>Resume</span>
@@ -61,8 +62,9 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 <div className="w-px h-3.5 bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
 
                 <button
+                    type="button"
                     onClick={toggleTheme}
-                    className="p-1 rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+                    className="p-1 rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer select-none"
                     aria-label="Toggle Theme"
                 >
                     {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}

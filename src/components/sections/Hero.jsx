@@ -22,6 +22,7 @@ const Hero = () => {
 
     const handleMouseMove = (e) => {
         if (!cardRef.current) return;
+        if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
         const rect = cardRef.current.getBoundingClientRect();
         
         const xPos = e.clientX - rect.left;
@@ -77,15 +78,25 @@ const Hero = () => {
                     </p>
 
                     <div className="flex gap-4 justify-start flex-wrap">
-                        <Link to="experience" smooth={true} offset={-50}>
-                            <button className="px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-black font-semibold rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors shadow-lg shadow-zinc-200/50 dark:shadow-none cursor-pointer">
-                                View Projects
-                            </button>
+                        <Link
+                            to="experience"
+                            smooth={true}
+                            offset={-50}
+                            duration={500}
+                            role="button"
+                            className="px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-black font-semibold rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors shadow-lg shadow-zinc-200/50 dark:shadow-none cursor-pointer inline-flex items-center justify-center select-none"
+                        >
+                            View Projects
                         </Link>
-                        <Link to="contact" smooth={true} offset={-50}>
-                            <button className="px-8 py-3 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 font-medium rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
-                                Contact Me
-                            </button>
+                        <Link
+                            to="contact"
+                            smooth={true}
+                            offset={-50}
+                            duration={500}
+                            role="button"
+                            className="px-8 py-3 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 font-medium rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer inline-flex items-center justify-center select-none"
+                        >
+                            Contact Me
                         </Link>
                     </div>
                 </motion.div>
