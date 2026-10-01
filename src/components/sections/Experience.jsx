@@ -281,7 +281,7 @@ const Experience = () => {
             </div>
 
             {/* Projects Section */}
-            <div className="grid md:grid-cols-4 gap-12 mb-20 border-t border-zinc-200 dark:border-zinc-900 pt-20">
+            <div id="projects" className="grid md:grid-cols-4 gap-12 mb-20 border-t border-zinc-200 dark:border-zinc-900 pt-20">
                 <div className="md:col-span-1">
                     <h2 className="text-3xl font-bold text-zinc-900 dark:text-white sticky top-24">Projects</h2>
                 </div>
