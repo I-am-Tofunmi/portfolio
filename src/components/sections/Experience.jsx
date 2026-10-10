@@ -1,7 +1,29 @@
-import React from 'react';
-import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ExternalLink, Github, ArrowUpRight, Award } from 'lucide-react';
+import ImageLightbox from '../ui/ImageLightbox';
 
-const ExperienceItem = ({ role, company, period, location, description, bullets, status, githubUrl, liveUrl, tools }) => (
+const ExperienceItem = ({
+    role,
+    company,
+    period,
+    location,
+    description,
+    bullets,
+    status,
+    githubUrl,
+    liveUrl,
+    tools,
+    image,
+    imageAlt,
+    certificateImage,
+    certificateImageAlt
+}) => {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [certLightboxOpen, setCertLightboxOpen] = useState(false);
+    const imageTriggerRef = useRef(null);
+    const certTriggerRef = useRef(null);
+
+    return (
     <div className="group border-l-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-100 pl-5 sm:pl-6 py-2 transition-colors duration-300">
         
         {/* Responsive Header Row */}
@@ -13,7 +35,13 @@ const ExperienceItem = ({ role, company, period, location, description, bullets,
             {/* Status & Period Badge Wrapper */}
             <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
                 {status && (
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-500/20">
+                    <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full font-semibold border ${
+                        status === 'Awaiting Certificate'
+                            ? 'bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
+                            : status === 'In Progress'
+                            ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700'
+                            : 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
+                    }`}>
                         {status}
                     </span>
                 )}
@@ -33,6 +61,28 @@ const ExperienceItem = ({ role, company, period, location, description, bullets,
             
             {/* Action Links */}
             <div className="flex items-center gap-2.5">
+                {certificateImage && (
+                    <>
+                        <button
+                            ref={certTriggerRef}
+                            type="button"
+                            onClick={() => setCertLightboxOpen(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 border border-emerald-200 dark:border-emerald-500/30 transition-all cursor-pointer shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                            title={`View ${role} Certificate`}
+                        >
+                            <Award size={13} />
+                            <span>View Certificate</span>
+                        </button>
+
+                        <ImageLightbox
+                            src={certificateImage}
+                            alt={certificateImageAlt || `${role} Certificate`}
+                            isOpen={certLightboxOpen}
+                            onClose={() => setCertLightboxOpen(false)}
+                            triggerRef={certTriggerRef}
+                        />
+                    </>
+                )}
                 {githubUrl && (
                     <a
                         href={githubUrl}
@@ -61,35 +111,99 @@ const ExperienceItem = ({ role, company, period, location, description, bullets,
             </div>
         </div>
 
-        {description && (
-            <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed max-w-2xl mb-3">
-                {description}
-            </p>
-        )}
+        {image ? (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start mt-1">
+                <div className="lg:col-span-7 flex flex-col justify-between">
+                    {description && (
+                        <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-3">
+                            {description}
+                        </p>
+                    )}
 
-        {bullets && bullets.length > 0 && (
-            <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl mb-3">
-                {bullets.map((b, idx) => (
-                    <li key={idx} className="leading-relaxed">{b}</li>
-                ))}
-            </ul>
-        )}
+                    {bullets && bullets.length > 0 && (
+                        <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 text-sm mb-3">
+                            {bullets.map((b, idx) => (
+                                <li key={idx} className="leading-relaxed">{b}</li>
+                            ))}
+                        </ul>
+                    )}
 
-        {/* Tech Stack & Tools Pills */}
-        {tools && tools.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-900/60">
-                {tools.map((tool, idx) => (
-                    <span
-                        key={idx}
-                        className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800/60"
+                    {tools && tools.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-900/60">
+                            {tools.map((tool, idx) => (
+                                <span
+                                    key={idx}
+                                    className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800/60"
+                                >
+                                    {tool}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="lg:col-span-5 w-full">
+                    {/* Image trigger button — opens lightbox */}
+                    <button
+                        ref={imageTriggerRef}
+                        type="button"
+                        onClick={() => setLightboxOpen(true)}
+                        aria-label={`Preview screenshot: ${imageAlt || role}`}
+                        className="w-full text-left overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 transition-all duration-300 group/img shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-zoom-in"
                     >
-                        {tool}
-                    </span>
-                ))}
+                        <img
+                            src={image}
+                            alt={imageAlt || role}
+                            className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover/img:scale-[1.02]"
+                            loading="lazy"
+                            draggable={false}
+                        />
+                    </button>
+
+                    {/* Lightbox */}
+                    <ImageLightbox
+                        src={image}
+                        alt={imageAlt || role}
+                        isOpen={lightboxOpen}
+                        onClose={() => setLightboxOpen(false)}
+                        triggerRef={imageTriggerRef}
+                    />
+                </div>
             </div>
+        ) : (
+            <>
+                {description && (
+                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed max-w-2xl mb-3">
+                        {description}
+                    </p>
+                )}
+
+                {bullets && bullets.length > 0 && (
+                    <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl mb-3">
+                        {bullets.map((b, idx) => (
+                            <li key={idx} className="leading-relaxed">{b}</li>
+                        ))}
+                    </ul>
+                )}
+
+                {/* Tech Stack & Tools Pills */}
+                {tools && tools.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-900/60">
+                        {tools.map((tool, idx) => (
+                            <span
+                                key={idx}
+                                className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800/60"
+                            >
+                                {tool}
+                            </span>
+                        ))}
+                    </div>
+                )}
+            </>
         )}
     </div>
-);
+    );
+};
 
 const Experience = () => {
     const experiences = [
@@ -148,15 +262,19 @@ const Experience = () => {
             period: "2026",
             githubUrl: "https://github.com/I-am-Tofunmi/SquadMind",
             description: "Built an AI-powered financial intelligence and credit scoring platform for Nigerian SMEs at Squad Hackathon 3.0. Developed the React/Vite frontend as part of Team Technest; platform deployed to Vercel with FastAPI backend on Railway.",
-            tools: ["React", "Vite", "FastAPI", "Railway", "Vercel"]
+            tools: ["React", "Vite", "FastAPI", "Railway", "Vercel"],
+            image: "/squadmind.png",
+            imageAlt: "SquadMind AI financial intelligence platform landing page"
         },
         {
-            role: "ElderCare AI — Frontend Engineer",
+            role: "ElderCare AI — Frontend Developer / Team Member",
             company: "Cavista Hackathon 2026",
             period: "Feb 2026",
             githubUrl: "https://github.com/I-am-Tofunmi/cavista-hackathon-2026-technest",
-            description: "Voice-first web health support system for elderly users with medication reminders and caregiver alerts. Multilingual support across English, Yoruba, Igbo, and Hausa.",
-            tools: ["React", "Web Speech API", "JavaScript", "Healthcare"]
+            description: "Collaborated on a voice-first support application designed to help elderly users interact with technology through accessible voice controls, medication reminders, multilingual interaction, and emergency assistance features.",
+            tools: ["React", "Web Speech API", "JavaScript", "Healthcare"],
+            image: "/eldercare-ai.png",
+            imageAlt: "ElderCare AI voice-first assistant interface with voice controls, reminders, and SOS emergency button"
         },
         {
             role: "SafeFlow — Frontend Engineer",
@@ -164,7 +282,9 @@ const Experience = () => {
             period: "Dec 2025",
             githubUrl: "https://github.com/I-am-Tofunmi/SafeFlow",
             description: "AI-powered financial safety application built to provide real-time transaction risk detection and security alerts.",
-            tools: ["React", "AWS Serverless", "Financial Safety"]
+            tools: ["React", "AWS Serverless", "Financial Safety"],
+            image: "/safeflow.png",
+            imageAlt: "SafeFlow financial safety dashboard with TrustScore and security intelligence"
         },
         {
             role: "AgriWise — Frontend Engineer",
@@ -172,14 +292,19 @@ const Experience = () => {
             period: "2025",
             githubUrl: "https://github.com/I-am-Tofunmi/AgriWise",
             description: "Smart agriculture platform designed for data-driven crop insights and yield monitoring.",
-            tools: ["React", "Python", "Smart Agriculture"]
+            tools: ["React", "Python", "Smart Agriculture"],
+            image: "/agriwise.png",
+            imageAlt: "AgriWise AI-powered crop health analysis and detection interface"
         },
         {
             role: "Property Listings REST API",
             company: "Backend Project",
             period: "2026",
+            githubUrl: "https://github.com/I-am-Tofunmi/property-listings-api",
             description: "Built a full property listings REST API with CRUD operations, Zod validation, and structured error handling. Implemented PostgreSQL schema with 5 normalized tables, migration files, and EXPLAIN ANALYZE for query optimization.",
-            tools: ["Node.js", "Express", "Zod", "PostgreSQL", "SQL Schema"]
+            tools: ["Node.js", "Express", "Zod", "PostgreSQL", "SQL Schema"],
+            image: "/property-listings-api.png",
+            imageAlt: "Property Listings REST API endpoint testing and JSON response in API client"
         },
         {
             role: "Career Readiness & Tech Skill Gap — UNILAG 200L CS Students",
@@ -187,7 +312,9 @@ const Experience = () => {
             period: "2025",
             githubUrl: "https://github.com/I-am-Tofunmi/unilag-career-readiness-analysis",
             description: "Designed and conducted a survey to analyze career readiness among 200-level CS students at UNILAG. Visualized findings and published results as a LinkedIn carousel with full project documented on GitHub.",
-            tools: ["Python", "pandas", "seaborn", "Jupyter Notebook"]
+            tools: ["Python", "pandas", "seaborn", "Jupyter Notebook"],
+            image: "/unilag-career-readiness.png",
+            imageAlt: "UNILAG 200L CS career readiness survey data analysis presentation slide"
         },
         {
             role: "PrimaryConnect (Score & Grading Engine)",
@@ -195,7 +322,9 @@ const Experience = () => {
             period: "2026",
             githubUrl: "https://github.com/olanihundaniel0-star/PrimaryConnect",
             description: "Offline, console-based school management system for a primary school built in Java & SQLite. Implemented the grading and score engine (40% test + 60% exam formula, A–F grade assignment, class ranking, and plain-text reporting).",
-            tools: ["Java", "SQLite", "Grading Engine", "Console UI"]
+            tools: ["Java", "SQLite", "Grading Engine", "Console UI"],
+            image: "/primaryconnect.png",
+            imageAlt: "PrimaryConnect Java grading and reporting system console demonstration"
         },
         {
             role: "TrustLend (Cross-track Team)",
@@ -227,7 +356,9 @@ const Experience = () => {
             company: "Coursera",
             period: "2026",
             status: "Completed",
-            description: "Data analysis, pandas, NumPy, data cleaning, exploratory analysis, visualization."
+            description: "Data analysis, pandas, NumPy, data cleaning, exploratory analysis, visualization.",
+            certificateImage: "/certificates/google-data-analysis-python.png",
+            certificateImageAlt: "Google Data Analysis with Python Specialization Certificate issued by Coursera"
         },
         {
             role: "Google IT Automation with Python Professional Certificate",
@@ -235,6 +366,15 @@ const Experience = () => {
             period: "Current",
             status: "In Progress",
             description: "Python automation, OS scripting, Git/GitHub, automation at scale."
+        },
+        {
+            role: "ITExperience Orientation 2026",
+            company: "IBM SkillsBuild",
+            period: "2026",
+            status: "Completed",
+            description: "Completed the ITExperience Orientation 2026 program covering IT professional foundations via IBM SkillsBuild.",
+            certificateImage: "/certificates/ibm-skillsbuild-orientation.png",
+            certificateImageAlt: "IBM SkillsBuild Completion Certificate for ITExperience Orientation 2026"
         },
         {
             role: "3MTT-Microsoft Skilling Program",
@@ -248,13 +388,15 @@ const Experience = () => {
             company: "TechCrush (ACTD-Accredited, USA)",
             period: "2026",
             status: "Completed",
-            description: "Frontend Development Certificate — Credential ID: TEC-A32BFFC3."
+            description: "Frontend Development Certificate — Credential ID: TEC-A32BFFC3.",
+            certificateImage: "/certificates/techcrush-frontend-development.png",
+            certificateImageAlt: "TechCrush 15-week Bootcamp Scholarship Frontend Development Certificate of Completion"
         },
         {
             role: "NITHUB Python Training Program",
             company: "NITHUB (University of Lagos)",
             period: "2026",
-            status: "Completed",
+            status: "Awaiting Certificate",
             description: "Completed Python Training Program with Capstone: CLI-based SQLite task tracker."
         },
         {
@@ -262,7 +404,9 @@ const Experience = () => {
             company: "Udemy",
             period: "2025",
             status: "Completed",
-            description: "Responsive frontend development and Netlify deployment certification."
+            description: "Responsive frontend development and Netlify deployment certification.",
+            certificateImage: "/certificates/udemy-responsive-portfolio.png",
+            certificateImageAlt: "Udemy Certificate of Completion for Responsive Portfolio Website with HTML CSS Netlify"
         }
     ];
 

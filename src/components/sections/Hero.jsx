@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-scroll';
-import { ArrowDown, Code2, Terminal, Cpu, Sparkles, Layers } from 'lucide-react';
+import { ArrowDown, Terminal } from 'lucide-react';
+
+// Alias satisfies eslint varsIgnorePattern /^[A-Z_]/ while keeping motion usable
+const Motion = motion;
 
 const Hero = () => {
     const [imgError, setImgError] = useState(false);
     const cardRef = useRef(null);
+    const shouldReduceMotion = useReducedMotion();
 
     // Mouse position relative to card for interactive spotlight & 3D tilt
     const mouseX = useMotionValue(0);
@@ -45,39 +49,66 @@ const Hero = () => {
         spotlightY.set(250);
     };
 
+    // Staggered entrance animation variants for hero content
+    const containerVariants = {
+        hidden: { opacity: shouldReduceMotion ? 1 : 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: shouldReduceMotion ? 0 : 0.08,
+                delayChildren: shouldReduceMotion ? 0 : 0.05,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: {
+            opacity: shouldReduceMotion ? 1 : 0,
+            y: shouldReduceMotion ? 0 : 16,
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: shouldReduceMotion ? 0.01 : 0.45,
+                ease: [0.25, 1, 0.5, 1],
+            },
+        },
+    };
+
     return (
         <section id="hero" className="min-h-[90vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto py-12 relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full relative z-10">
                 
-                {/* Left Aligned Content Composition */}
+                {/* Left Aligned Content Composition with subtle staggered fade-in */}
                 <motion.div
                     className="lg:col-span-7 flex flex-col items-start text-left"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
                 >
-                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3 mb-6">
                         <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase bg-emerald-100 dark:bg-emerald-500/10 rounded-full border border-emerald-200 dark:border-emerald-500/20">
                             Available for work
                         </span>
                         <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
                             Hello, I'm <span className="text-zinc-900 dark:text-white font-bold">Panda</span> (Omololu Tofunmi)
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <span className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-2">
+                    <motion.span variants={itemVariants} className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-2">
                         FULL STACK DEVELOPER
-                    </span>
+                    </motion.span>
 
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-white mb-6">
+                    <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-white mb-6">
                         Full Stack Developer building <span className="text-zinc-500 dark:text-zinc-500">scalable digital experiences.</span>
-                    </h1>
+                    </motion.h1>
 
-                    <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mb-10 leading-relaxed">
+                    <motion.p variants={itemVariants} className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mb-10 leading-relaxed">
                         I build modern web applications across the frontend and backend — from interfaces to APIs, databases, and deployment. I also use Python for automation and data-driven work.
-                    </p>
+                    </motion.p>
 
-                    <div className="flex gap-4 justify-start flex-wrap">
+                    <motion.div variants={itemVariants} className="flex gap-4 justify-start flex-wrap">
                         <Link
                             to="experience"
                             smooth={true}
@@ -98,22 +129,30 @@ const Hero = () => {
                         >
                             Contact Me
                         </Link>
-                    </div>
+                    </motion.div>
                 </motion.div>
 
                 {/* Right Column — Ultra-Interactive Photo Experience */}
                 <motion.div
                     className="lg:col-span-5 flex justify-center lg:justify-end w-full"
-                    initial={{ opacity: 0, scale: 0.92 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
+                    initial={{
+                        opacity: shouldReduceMotion ? 1 : 0,
+                        y: shouldReduceMotion ? 0 : 20,
+                        scale: shouldReduceMotion ? 1 : 0.96,
+                    }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                        duration: shouldReduceMotion ? 0.01 : 0.55,
+                        delay: shouldReduceMotion ? 0 : 0.2,
+                        ease: [0.25, 1, 0.5, 1],
+                    }}
                     style={{ perspective: "1200px" }}
                 >
                     <div className="relative w-full max-w-md">
                         
                         {/* Orbiting Floating Badge 1 (Top Left) */}
                         <motion.div
-                            animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+                            animate={shouldReduceMotion ? {} : { y: [0, -10, 0], x: [0, 5, 0] }}
                             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                             className="absolute -top-4 -left-4 z-40 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 shadow-xl flex items-center gap-2 text-xs font-semibold text-zinc-800 dark:text-zinc-200"
                         >
@@ -123,7 +162,7 @@ const Hero = () => {
 
                         {/* Orbiting Floating Badge 2 (Bottom Right) */}
                         <motion.div
-                            animate={{ y: [0, 10, 0], x: [0, -6, 0] }}
+                            animate={shouldReduceMotion ? {} : { y: [0, 10, 0], x: [0, -6, 0] }}
                             transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                             className="absolute -bottom-4 -right-4 z-40 px-3 py-1.5 rounded-xl bg-zinc-900 dark:bg-black text-white backdrop-blur-md border border-zinc-700/80 shadow-xl flex items-center gap-2 text-xs font-mono"
                         >
@@ -195,9 +234,9 @@ const Hero = () => {
 
             <motion.div
                 className="mt-12 self-center text-zinc-400 dark:text-zinc-600 animate-bounce hidden md:block"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 0.5 }}
+                transition={{ delay: shouldReduceMotion ? 0 : 0.6, duration: shouldReduceMotion ? 0.01 : 0.4 }}
             >
                 <ArrowDown size={20} />
             </motion.div>
