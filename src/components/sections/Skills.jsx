@@ -30,7 +30,7 @@ const Skills = () => {
                 />
                 <SkillCard
                     title="Backend"
-                    items={["Node.js", "Express", "NestJS", "REST APIs", "Zod", "Python", "Flask"]}
+                    items={["Node.js", "Express", "NestJS", "REST APIs", "Zod", "Python", "Flask", "Directus", "Sanity CMS"]}
                 />
                 <SkillCard
                     title="Databases"
@@ -42,7 +42,7 @@ const Skills = () => {
                 />
                 <SkillCard
                     title="Tools & DevOps"
-                    items={["Git", "GitHub", "Postman", "Render", "Vercel", "dbdiagram.io"]}
+                    items={["Git", "GitHub", "Postman", "Render", "Railway", "Vercel", "Cloudflare", "dbdiagram.io", "Resend"]}
                     className="md:col-span-2 lg:col-span-2"
                 />
             </div>

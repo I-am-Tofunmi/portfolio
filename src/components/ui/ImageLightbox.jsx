@@ -93,25 +93,27 @@ const ImageLightbox = ({ src, alt, isOpen, onClose, triggerRef }) => {
                     onClick={handleBackdropClick}
                     className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-black/70 backdrop-blur-sm"
                 >
+                    {/* Stop propagation so clicks inside the card never reach the backdrop handler */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.96, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: 10 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
+                        onClick={(e) => e.stopPropagation()}
                         className="relative w-full max-w-4xl"
                     >
-                        {/* Close button */}
+                        {/* Close button — z-[20] keeps it above the image layer regardless of stacking context */}
                         <button
                             ref={closeBtnRef}
                             type="button"
                             onClick={handleClose}
                             aria-label="Close image preview"
-                            className="absolute -top-3 -right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 dark:bg-zinc-800 border border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-700 dark:hover:bg-zinc-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-lg"
+                            className="absolute -top-3 -right-3 z-[20] flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 dark:bg-zinc-800 border border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-700 dark:hover:bg-zinc-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-lg"
                         >
                             <X size={15} />
                         </button>
 
-                        {/* Image */}
+                        {/* Image — overflow-hidden does not clip the sibling close button */}
                         <div className="overflow-hidden rounded-xl border border-zinc-700/60 bg-zinc-900 shadow-2xl max-h-[85vh] flex items-center justify-center">
                             <img
                                 src={src}
